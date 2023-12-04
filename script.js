@@ -1,68 +1,53 @@
 // Wrap all code that interacts with the DOM in a call to jQuery to ensure that
 // the code isn't run until the browser has finished rendering all the elements
 // in the html.
-var saveBtn = $('button');
 
-
-saveBtn.on('click', function () {
-    var task = {
-        "hour" :this.parentNode.id, 
-        "taskName" : $(this).siblings('textarea').val()
-    }
-    localStorage.setItem('task', JSON.stringify(task))
-
-    savedTask = localStorage.getItem('task');
-    $(this).siblings('textarea').html = task.taskName;
-    
-    // TODO: Add a listener for click events on the save button. This code should
-    // use the id in the containing time-block as a key to save the user input in
-    // local storage. HINT: What does `this` reference in the click listener
-    // function? How can DOM traversal be used to get the "hour-x" id of the
-    // time-block containing the button that was clicked? How might the id be
-    // useful when saving the description in local storage?
-    //
-    // TODO: Add code to apply the past, present, or future class to each time
-    // block by comparing the id to the current hour. HINTS: How can the id
-    // attribute of each time-block be used to conditionally add or remove the
-    // past, present, and future classes? How can Day.js be used to get the
-    // current hour in 24-hour time?
-    //
-    // TODO: Add code to get any user input that was saved in localStorage and set
-    // the values of the corresponding textarea elements. HINT: How can the id
-    // attribute of each time-block be used to do this?
-    //
-    // TODO: Add code to display the current date in the header of the page.
-
- });
-
-    // TODO: Add code to display the current date in the header of the page.
-
+$(document).ready(function(){
+// displaying current day
  var today = dayjs().format('dddd, MMMM, D YYYY');
-  $('#currentDay').text(today);
-  
-/////// compare time 
+  $('#currentDay').text(today);  
+
+// checking each timebox and comparing to current hour to change textbox color 
+// also checking local storage to set textbox values
     var currentHour = dayjs().format('HH A')
     var allTimebox = document.querySelectorAll(".time-block");
     
     currentHourNum = parseInt(currentHour)
 
-    console.log(currentHourNum)
-
-    
-   
     for (i=0; i<allTimebox.length; i++){
         var chosenHour= parseInt(allTimebox[i].textContent)
 
        if (currentHourNum === chosenHour){
         $(allTimebox[i]).addClass('present')
        }
-       
        if (currentHourNum < chosenHour){
          $(allTimebox[i]).addClass('future')
        }
-       
        if (currentHourNum > chosenHour){
         $(allTimebox[i]).addClass('past')
        }
+       // checking local storage to set textbox event
+
+       var hourId = allTimebox[i].id
+       savedTask = localStorage.getItem(hourId);
+       $(allTimebox[i]).children('textarea').html=savedTask;
     }
+    /// check local storage for 
+    // var hourId = this.parentNode.id 
+    // savedTask = localStorage.getItem(hourId);
+    // $(this).siblings('textarea').html = savedTask;
+})
+
+// click event
+$('button').on('click', function () {
+    var hourId = this.parentNode.id 
+    var taskName = $(this).siblings('textarea').val()
+
+    localStorage.setItem(hourId, JSON.stringify(taskName))
+
+ });
+
+
+  
+
    
