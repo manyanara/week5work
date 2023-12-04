@@ -8,7 +8,8 @@ $(document).ready(function(){
   $('#currentDay').text(today);  
 
 // checking each timebox and comparing to current hour to change textbox color 
-// also checking local storage to set textbox values
+setInterval(function(){
+
     var currentHour = dayjs().format('HH A')
     var allTimebox = document.querySelectorAll(".time-block");
     
@@ -30,21 +31,20 @@ $(document).ready(function(){
 
        var hourId = allTimebox[i].id
        savedTask = localStorage.getItem(hourId);
-       $(allTimebox[i]).children('textarea').html=savedTask;
+       console.log(savedTask)
+       $(allTimebox[i]).children('textarea').text(savedTask);
     }
-    /// check local storage for 
-    // var hourId = this.parentNode.id 
-    // savedTask = localStorage.getItem(hourId);
-    // $(this).siblings('textarea').html = savedTask;
 })
+}, 1800000)
 
-// click event
+// click event saving to local storage
 $('button').on('click', function () {
     var hourId = this.parentNode.id 
     var taskName = $(this).siblings('textarea').val()
 
-    localStorage.setItem(hourId, JSON.stringify(taskName))
-
+    localStorage.setItem(hourId, taskName)
+    alert('Event added to calendar!')
+    location.reload();
  });
 
 
