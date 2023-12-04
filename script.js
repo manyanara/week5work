@@ -3,16 +3,17 @@
 // in the html.
 var saveBtn = $('button');
 
-var savedTask = {};
 
 saveBtn.on('click', function () {
     var task = {
         "hour" :this.parentNode.id, 
         "taskName" : $(this).siblings('textarea').val()
     }
-    
     localStorage.setItem('task', JSON.stringify(task))
-  
+
+    savedTask = localStorage.getItem('task');
+    $(this).siblings('textarea').html = task.taskName;
+    
     // TODO: Add a listener for click events on the save button. This code should
     // use the id in the containing time-block as a key to save the user input in
     // local storage. HINT: What does `this` reference in the click listener
@@ -32,8 +33,36 @@ saveBtn.on('click', function () {
     //
     // TODO: Add code to display the current date in the header of the page.
 
-    
-  });
+ });
 
-  var today = dayjs().format('dddd, MMMM, D YYYY');
+    // TODO: Add code to display the current date in the header of the page.
+
+ var today = dayjs().format('dddd, MMMM, D YYYY');
   $('#currentDay').text(today);
+  
+/////// compare time 
+    var currentHour = dayjs().format('HH A')
+    var allTimebox = document.querySelectorAll(".time-block");
+    
+    currentHourNum = parseInt(currentHour)
+
+    console.log(currentHourNum)
+
+    
+   
+    for (i=0; i<allTimebox.length; i++){
+        var chosenHour= parseInt(allTimebox[i].textContent)
+
+       if (currentHourNum === chosenHour){
+        $(allTimebox[i]).addClass('present')
+       }
+       
+       if (currentHourNum < chosenHour){
+         $(allTimebox[i]).addClass('future')
+       }
+       
+       if (currentHourNum > chosenHour){
+        $(allTimebox[i]).addClass('past')
+       }
+    }
+   
